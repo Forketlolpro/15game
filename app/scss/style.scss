@@ -1,0 +1,65 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#game {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	
+	div {
+		color: wheat;
+		font-size: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100px;
+		height: 100px;
+		margin: 5px;
+		text-align: center;
+		background-color: #DC143C;
+		visibility: visible;
+	}
+
+	div.zero {
+		visibility: hidden;
+	}
+}
+
+.control {
+	margin-top: 10px;
+	width: 220px;
+
+	button {
+		color: wheat;
+		font-size: 24px;
+		border: none;
+		background-color: #DC143C;
+		width: 100%;
+		height: 40px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	input {
+		width: 100%;
+		margin-bottom: 10px;
+		border-color: #dc143c;
+    	padding: 4px;
+    	box-sizing: border-box;
+	}
+}
