@@ -3,10 +3,20 @@ var gulp = require('gulp'),
 		browserSync   = require('browser-sync'),
 		concat        = require('gulp-concat'),
 		cleancss      = require('gulp-clean-css'),
-		rename        = require('gulp-rename'),
 		autoprefixer  = require('gulp-autoprefixer'),
 		notify        = require('gulp-notify'),
 		rsync         = require('gulp-rsync');
+
+		var configuration = {
+			paths: {
+				src: {
+					html: 'src/*.html',
+					css: 'src/style.scss',
+					js: 'src/script.js'
+				},
+				dist: 'app'
+			}
+		};
 
 
 gulp.task('browser-sync', function() {
@@ -20,30 +30,28 @@ gulp.task('browser-sync', function() {
 
 // Sass|Scss Styles
 gulp.task('styles', function() {
-	return gulp.src('app/scss/**/*.scss')
+	return gulp.src(configuration.paths.src.css, { allowEmpty: true })
 	.pipe(sass({ outputStyle: 'expanded' }).on("error", notify.onError()))
-	.pipe(rename({ suffix: '.min', prefix : '' }))
 	.pipe(autoprefixer(['last 15 versions']))
 	.pipe(cleancss( {level: { 1: { specialComments: 0 } } }))
-	.pipe(gulp.dest('app/css'))
+	.pipe(gulp.dest(configuration.paths.dist))
 	.pipe(browserSync.stream())
 });
 
 
 gulp.task('scripts', function() {
-	return gulp.src([
-		'app/js/script.js',
-		])
-	.pipe(concat('scripts.min.js'))
+	return gulp.src(configuration.paths.src.js)
+	.pipe(concat('script.js'))
 	// .pipe(uglify()) // Mifify js (opt.)
-	.pipe(gulp.dest('app/js'))
+	.pipe(gulp.dest(configuration.paths.dist))
 	.pipe(browserSync.reload({ stream: true }))
 });
 
 
 gulp.task('code', function() {
-	return gulp.src('app/*.html')
-	.pipe(browserSync.reload({ stream: true }))
+	return gulp.src(configuration.paths.src.html)
+	.pipe(gulp.dest(configuration.paths.dist))
+	.pipe(browserSync.reload({ stream: true }));
 });
 
 
@@ -65,6 +73,6 @@ gulp.task('rsync', function() {
 gulp.task('watch', function() {
     gulp.watch('app/scss/**/*.scss', gulp.parallel('styles'));
     gulp.watch(['src/script.js'], gulp.parallel('scripts'));
-    gulp.watch('app/*.html', gulp.parallel('code'));
+    gulp.watch('src/*.html', gulp.parallel('code'));
 });
-gulp.task('default', gulp.parallel('styles', 'scripts', 'browser-sync', 'watch'));
+gulp.task('default', gulp.parallel('styles', 'scripts', 'code', 'browser-sync', 'watch'));

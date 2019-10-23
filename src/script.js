@@ -131,5 +131,5 @@ class Game {
 	}
 }
 
-let game = new Game();
+const game = new Game();
 game.start();
